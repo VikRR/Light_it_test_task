@@ -1,0 +1,21 @@
+{
+  "name": "vikr/comments",
+  "description": "Test task show comments",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "VikRR",
+      "email": "rubetc.v.i@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "components/bootstrap": "^3.3",
+    "facebook/graph-sdk": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "comm\\": ""
+    }
+  }
+}
