@@ -12,7 +12,6 @@ use PDO as PDO;
 
 class DB
 {
-
     private static $_instance = null;
 
     private function __construct()
@@ -23,14 +22,13 @@ class DB
     {
     }
 
-    private function __wakeup()
-    {
-    }
-
+    /**
+     * Подключение к бд через патерн Singleton
+     * @return bool|null|PDO
+     */
     public static function connect()
     {
         if (is_null(self::$_instance)) {
-            //self::$_instance = new self();
             $dns = 'mysql:host=' . HOST . '; dbname=' . DB_NAME . '; charset=utf8;';
             $db_option = [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -39,21 +37,18 @@ class DB
             ];
             try {
                 self::$_instance = new PDO($dns, DB_USER, DB_PASSWORD, $db_option);
-                //return new PDO('mysql:host=localhost; dbname=it_light_comments;', 'root','');
-                //$pdo = new PDO($dns, DB_USER, DB_PASSWORD, $db_option);
 
-                //return $pdo;
             } catch (\PDOException $e) {
                 echo 'Connection to database ' . DB_NAME . ' failed: ' . $e->getMessage();
 
                 return false;
             }
+
             return self::$_instance;
-        }  else{
+        } else {
+
             return self::$_instance;
         }
-
-        //return self::$_instance;
     }
 
 }

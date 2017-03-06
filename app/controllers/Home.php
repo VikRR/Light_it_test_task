@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: viktor
- * Date: 28.02.17
- * Time: 12:10
- */
 
 namespace comm\app\controllers;
 
@@ -22,27 +16,39 @@ class Home extends Controller
 
     }
 
+    /**
+     * Формирование ссылки для входа в приложение через Facebook
+     */
     public function index()
     {
-        $fb = new Facebook([
-            'app_id'                => FB_APP_ID,
-            'app_secret'            => FB_APP_SEC,
-            'default_graph_version' => 'v2.8',
-        ]);
+        if (isset($_SESSION['fb_id'])) {
 
-        $helper = $fb->getRedirectLoginHelper();
+            header('Location: comments');
+        } else {
 
-        $permissions = ['public_profile', 'email']; // Optional permissions
+            $fb = new Facebook([
+                'app_id'                => FB_APP_ID,
+                'app_secret'            => FB_APP_SEC,
+                'default_graph_version' => 'v2.8',
+            ]);
 
-        $loginUrl = $helper->getLoginUrl('http://comment.dev/callback', $permissions);
+            $helper = $fb->getRedirectLoginHelper();
 
-        $_SESSION['link'] = $loginUrl;
+            $permissions = ['public_profile', 'email']; // Optional permissions
 
-        $data['link'] = $loginUrl;
+            $loginUrl = $helper->getLoginUrl('http://comment.dev/callback', $permissions);
+
+            $_SESSION['link'] = $loginUrl;
+
+            $data['link'] = $loginUrl;
+        }
 
         $this->view->load('home/index', $data);
     }
 
+    /**
+     *Формирование запроса, вход и обработка полученной от Facebook информации о пользователе
+     */
     public function fbCallback()
     {
         $fb = new Facebook([
@@ -152,9 +158,20 @@ class Home extends Controller
             $user->setUser($data);
         }
 
+        $user_id = $user->getUser($_SESSION['fb_id']);
+
+        foreach ($user_id as $value) {
+            $user_id = $value;
+        }
+
+        $_SESSION['user_id'] = (int)$user_id;
+
         header('Location: comments');
     }
 
+    /**
+     * Выход пользователя
+     */
     public function logout()
     {
         session_destroy();

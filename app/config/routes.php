@@ -1,11 +1,11 @@
 <?php
 
 return array(
-    ''         => 'home/index',
-    //'show'     => 'home/create',
-    'callback' => 'home/fbCallback',
-    'post'     => 'comment/create',
-    'comments' => 'comment/index',
-    'logout'   => 'home/logout',
+    ''              => 'home/index',
+    'callback'      => 'home/fbCallback',
+    'post/([0-9]+)' => 'comment/createComment/$1',
+    'post'          => 'comment/createPost',
+    'comments'      => 'comment/index',
+    'logout'        => 'home/logout',
 
 );
