@@ -1,0 +1,46 @@
+
+-- MySQL Workbench Synchronization
+-- Generated: 2017-03-06 15:07
+-- Model: New Model
+-- Version: 1.0
+-- Project: Name of the project
+-- Author: viktor
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE SCHEMA IF NOT EXISTS `it_light_comments` DEFAULT CHARACTER SET utf8 ;
+
+CREATE TABLE IF NOT EXISTS `it_light_comments`.`users` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `fb_id` BIGINT(20) NOT NULL,
+  `first_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `reg_date` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `fb_id_UNIQUE` (`fb_id` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `it_light_comments`.`posts` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_id` INT(11) NOT NULL,
+  `parent_id` INT(11) NOT NULL DEFAULT 0,
+  `post` TEXT NOT NULL,
+  `post_date` INT(11) NOT NULL,
+  PRIMARY KEY (`id`, `user_id`),
+  INDEX `fk_posts_users_idx` (`user_id` ASC),
+  CONSTRAINT `fk_posts_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `it_light_comments`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
